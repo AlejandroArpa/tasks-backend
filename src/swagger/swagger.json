@@ -1,651 +1,266 @@
 {
-	"swagger": "2.0",
-	"info": {
-		"version": "1.0.0",
-		"title": "API Documentation",
-		"description": "API Documentation"
-	},
-	"host": "localhost:3000",
-	"basePath": "/",
-	"schemes": [
-		"http"
-	],
-	"securityDefinitions": {
-		"Bearer": {
-			"type": "apiKey",
-			"name": "Authorization",
-			"in": "header",
-			"description": "JWT authorization of an API. Example: 'Bearer {token}'"
-		}
-	},
-	"tags": [
-		{
-			"name": "Authentication"
-		},
-		{
-			"name": "Users"
-		},
-		{
-			"name": "Products"
-		},
-		{
-			"name": "Products Carts"
-		},
-		{
-			"name": "Orders"
-		}
-	],
-	"paths": {
-		"/api/auth": {
-			"post": {
-				"tags": [
-					"Authentication"
-				],
-				"summary": "User register",
-				"parameters": [
-					{
-						"name": "body",
-						"in": "body",
-						"required": true,
-						"description": "User name",
-						"schema": {
-							"$ref": "#/definitions/User"
-						}
-					}
-				],
-				"responses": {
-					"201": {
-						"description": "User register"
-					}
-				}
-			}
-		},
-		"/api/auth/login": {
-			"post": {
-				"tags": [
-					"Authentication"
-				],
-				"summary": "User login",
-				"parameters": [
-					{
-						"name": "body",
-						"in": "body",
-						"required": true,
-						"description": "User email and password",
-						"schema": {
-							"type": "object",
-							"properties": {
-								"email": {
-									"type": "string",
-									"default": "john.doe@example.com"
-								},
-								"password": {
-									"type": "string"
-								}
-							},
-							"required": [
-								"email",
-								"password"
-							]
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "User login"
-					}
-				}
-			}
-		},
-		"/api/users": {
-			"get": {
-				"tags": [
-					"Users"
-				],
-				"summary": "Get all users",
-				"responses": {
-					"206": {
-						"description": "Get all users"
-					}
-				}
-			}
-		},
-		"/api/users/{id}": {
-			"put": {
-				"tags": [
-					"Users"
-				],
-				"summary": "Update user",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "User id to update",
-						"type": "integer"
-					},
-					{
-						"name": "body",
-						"in": "body",
-						"required": true,
-						"description": "User name",
-						"schema": {
-							"$ref": "#/definitions/User"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "User updated"
-					}
-				}
-			},
-			"delete": {
-				"tags": [
-					"Users"
-				],
-				"security": [
-					{
-						"Bearer": []
-					}
-				],
-				"summary": "Delete user",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "User id to delete",
-						"type": "integer"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "User deleted"
-					}
-				}
-			}
-		},
-		"/api/orders": {
-			"get": {
-				"security": [
-					{
-						"Bearer": []
-					}
-				],
-				"tags": [
-					"Orders"
-				],
-				"summary": "Get all orders",
-				"responses": {
-					"206": {
-						"description": "Get all orders"
-					}
-				}
-			},
-			"post": {
-				"security": [
-					{
-						"Bearer": []
-					}
-				],
-				"tags": [
-					"Orders"
-				],
-				"summary": "Create order",
-				"parameters": [
-					{
-						"name": "order",
-						"in": "body",
-						"required": true,
-						"description": "Order data",
-						"schema": {
-							"type": "object",
-							"properties": {
-								"userId": {
-									"type": "integer",
-									"default": 1
-								},
-								"cartId": {
-									"type": "integer",
-									"default": 1
-								}
-							},
-							"required": [
-								"userId",
-								"cartId"
-							]
-						}
-					}
-				],
-				"responses": {
-					"201": {
-						"description": "Order created"
-					}
-				}
-			}
-		},
-		"/api/orders/{id}": {
-			"put":{
-				"security":[
-					{
-						"Bearer": []
-					}
-				],
-				"tags": [
-					"Orders"
-				],
-				"summary": "Update order",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "Order id to update",
-						"type": "integer"
-					},
-					{
-						"name": "order",
-						"in": "body",
-						"required": true,
-						"description": "Order data",
-						"schema": {
-							"type": "object",
-							"properties": {
-								"userId": {
-									"type": "integer",
-									"default": 1
-								},
-								"cartId": {
-									"type": "integer",
-									"default": 1
-								}
-							},
-							"required": [
-								"userId",
-								"cartId"
-							]
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Order updated"
-					}
-				}
-			},
-			"delete": {
-				"security": [
-					{
-						"Bearer": []
-					}
-				],
-				"tags": [
-					"Orders"
-				],
-				"summary": "Delete order",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "Order id to delete",
-						"type": "integer"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Order deleted"
-					}
-				}
-			}
-		},
-		"/api/orders/users/{id}": {
-			"get": {
-				"security":[
-					{
-						"Bearer": []
-					}
-				],
-				"tags": [
-					"Orders"
-				],
-				"summary": "Get all orders by user",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "User id to get orders",
-						"type": "integer"
-					}
-				],
-				"responses": {
-					"206": {
-						"description": "Get all orders by user"
-					}
-				}
-			}
-		},
-		"/api/productsCarts": {
-			"post": {
-				"tags": [
-					"Products Carts"
-				],
-				"summary": "Add product to cart",
-				"parameters": [
-					{
-						"name": "productCart",
-						"in": "body",
-						"required": true,
-						"description": "Product cart data",
-						"schema": {
-							"type": "object",
-							"properties": {
-								"productId": {
-									"type": "integer",
-									"default": 1
-								},
-								"cartId": {
-									"type": "integer",
-									"default": 1
-								},
-								"quantity": {
-									"type": "integer",
-									"default": 1
-								}
-							},
-							"required": [
-								"productId",
-								"cartId",
-								"quantity"
-							]
-						}
-					}
-				],
-				"responses": {
-					"201": {
-						"description": "Product added to cart"
-					}
-				}
-			}
-		},
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "task API Documentation",
+    "description": "task API Documentation"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT authorization of an API. Example: 'Bearer {token}'"
+    }
+  },
+  "tags": [
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "Tasks"
+    },
+    {
+      "name": "Categories"
+    },
+    {
+      "name": "Tags"
+    },
+    {
+      "name": "Users"
+    }
+  ],
+  "paths": {
 
-		"/api/productsCarts/{id}/Products/{ProductId}": {
-			"patch":{
-				"tags": [
-					"Products Carts"
-				],
-				"summary": "Update product quantity in cart",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "Product cart id to update",
-						"type": "integer"
-					},
-					{
-						"name": "ProductId",
-						"in": "path",
-						"required": true,
-						"description": "Product id to update",
-						"type": "integer"
-					},
-					{
-						"name": "quantity",
-						"in": "body",
-						"required": true,
-						"description": "Product quantity",
-						"schema": {
-							"type": "object",
-							"properties": {
-								"quantity": {
-									"type": "integer",
-									"default": 1
-								}
-							},
-							"required": [
-								"quantity"
-							]
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Product quantity updated in cart"
-					}
-				}
-			},
-			"delete": {
-				"tags": [
-					"Products Carts"
-				],
-					"summary": "Delete product from cart",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "Product cart id to delete",
-						"type": "integer"
-					},
-					{
-						"name": "ProductId",
-						"in": "path",
-						"required": true,
-						"description": "Product id to delete",
-						"type": "integer"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Product deleted from cart"
-					}
-				}
-			}
-		},
-		"/api/products": {
-			"get": {
-				"tags": [
-					"Products"
-				],
-				"summary": "Get all products",
-				"responses": {
-					"206": {
-						"description": "Get all products"
-					}
-				}
-			},
-			"post": {
-				"tags": [
-					"Products"
-				],
-				"summary": "Create product",
-				"parameters": [
-					{
-						"name": "product",
-						"in": "body",
-						"required": true,
-						"description": "Product data",
-						"schema": {
-							"type": "object",
-							"properties": {
-								"name": {
-									"type": "string",
-									"default": "Product name"
-								},
-								"price": {
-									"type": "number",
-									"default": 0
-								},
-								"stock": {
-									"type": "integer",
-									"default": 0
-								},
-								"description": {
-									"type": "string",
-									"default": "Product description"
-								}
-							},
-							"required": [
-								"name",
-								"price",
-								"stock"
-							]
-						}
-					}
-				],
-				"responses": {
-					"201": {
-						"description": "Product created"
-					}
-				}
-			}
-		},
-		"/api/products/{id}": {
-			"put": {
-				"tags": [
-					"Products"
-				],
-				"summary": "Update product",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "Product id to update",
-						"type": "integer"
-					},
-					{
-						"name": "product",
-						"in": "body",
-						"required": true,
-						"description": "Product data",
-						"schema": {
-							"type": "object",
-							"properties": {
-								"name": {
-									"type": "string",
-									"default": "Product name"
-								},
-								"price": {
-									"type": "number",
-									"default": 0
-								},
-								"stock": {
-									"type": "integer",
-									"default": 0
-								},
-								"description": {
-									"type": "string",
-									"default": "Product description"
-								}
-							},
-							"required": [
-								"name",
-								"price",
-								"stock"
-							]
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Product updated"
-					}
-				},
-				"delete": {
-					"tags": [
-						"Products"
-					],
-					"summary": "Delete product",
-					"parameters": [
-						{
-							"name": "id",
-							"in": "path",
-							"required": true,
-							"description": "Product id to delete",
-							"type": "integer"
-						}
-					],
-					"responses": {
-						"200": {
-							"description": "Product deleted"
-						}
-					}
-				}
-			},
-			"delete": {
-				"tags": [
-					"Products"
-				],
-				"summary": "Delete product",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "Product id to delete",
-						"type": "integer"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Product deleted"
-					}
-				}
-			}
-		},
-		"/api/products/orders/{id}":{
-			"get": {
-				"tags": [
-					"Products"
-				],
-				"summary": "Get all products by order",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "Order id to get products",
-						"type": "integer"
-					}
-				],
-				"responses": {
-					"206": {
-						"description": "Get all products by order"
-					}
-				}
-			}
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User register",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "User name",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User register"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "User email and password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "default": "john.doe@example.com"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": ["email", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User login"
+          }
+        }
+      }
+    },
+
+
+    "/api/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all tasks by user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Get all tasks"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+
+	"/api/tasks/": {
+	  "post": {
+		"tags": ["Tasks"],
+		"summary": "Create task",
+		"security": [
+		  {
+			"Bearer": []
+		  }
+		],
+		"parameters": [
+		  {
+			"name": "id",
+			"in": "path",
+			"required": true,
+			"description": "Task id to get",
+			"type": "integer"
+		  }
+		],
+		"responses": {
+		  "200": {
+			"description": "Get task by id"
+		  },
+		  "401": {
+			"description": "Unauthorized"
+		  }
 		}
+	  }
 	},
-	"definitions": {
-		"User": {
-			"type": "object",
-			"properties": {
-				"name": {
-					"type": "string",
-					"default": "John Doe"
-				},
-				"email": {
-					"type": "string",
-					"default": "john.doe@example.com"
-				},
-				"password": {
-					"type": "string"
-				},
-				"rolId": {
-					"type": "integer",
-					"default": 1
-				}
-			},
-			"required": [
-				"name",
-				"email",
-				"password",
-				"rolId"
-			]
+
+	"/api/tasks/{id}": {
+	  "put": {
+		"tags": ["Tasks"],
+		"summary": "Update task",
+		"security": [
+		  {
+			"Bearer": []
+		  }
+		],
+		"parameters": [
+		  {
+			"name": "id",
+			"in": "path",
+			"required": true,
+			"description": "Task id to update",
+			"type": "integer"
+		  },
+		  {
+			"name": "body",
+			"in": "body",
+			"required": true,
+			"description": "Task data",
+			"schema": {
+			  "$ref": "#/definitions/Task"
+			}
+		  }
+		],
+		"responses": {
+		  "200": {
+			"description": "Task updated"
+		  },
+		  "401": {
+			"description": "Unauthorized"
+		  }
 		}
+	  },
+
+	  "delete": {
+		"tags": ["Tasks"],
+		"summary": "Delete task",
+		"security": [
+		  {
+			"Bearer": []
+		  }
+		],
+		"parameters": [
+		  {
+			"name": "id",
+			"in": "path",
+			"required": true,
+			"description": "Task id to delete",
+			"type": "integer"
+		  }
+		],
+		"responses": {
+		  "200": {
+			"description": "Task deleted"
+		  },
+		  "401": {
+			"description": "Unauthorized"
+		  }
+		}
+	  }
 	}
+  },
+  
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "John Doe"
+        },
+        "email": {
+          "type": "string",
+          "default": "john.doe@example.com"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "email", "password", "rolId"]
+    },
+	"Task": {
+	  "type": "object",
+	  "properties": {
+		"title": {
+		  "type": "string",
+		  "default": "Task title"
+		},
+		"description": {
+		  "type": "string",
+		  "default": "Task description"
+		},
+		"dueDate": {
+		  "type": "string",
+		  "format": "date-time"
+		},
+		"categoryId": {
+		  "type": "integer",
+		  "default": 1
+		},
+		"tags": {
+		  "type": "array",
+		  "items": {
+			"$ref": "#/definitions/Tag"
+		  }
+		}
+	  },
+	  "required": ["title", "description", "dueDate", "categoryId"]
+	},
+	"Tag": {
+	  "type": "object",
+	  "properties": {
+		"name": {
+		  "type": "string",
+		  "default": "Tag name"
+		}
+	  },
+	  "required": ["name"]
+	}
+  }
 }

@@ -7,9 +7,11 @@ export const userRoute = Router();
 userRoute.get('/', (req, res) => {
   res.send("Get all users");
 });
+
 userRoute.put('/:id', (req, res) => {
   res.send("Update user");
 });
+
 userRoute.delete('/:id', (req, res) => {
   res.send("Delete user");
 });
