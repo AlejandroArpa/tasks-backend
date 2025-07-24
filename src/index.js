@@ -5,12 +5,16 @@ import {sequelize}        	from './config/db.js';
 import express              from 'express';
 import { config }           from 'dotenv';
 import { createRequire }    from 'module';
+import cors 				from "cors";
 
 config();
 
 const { PORT } = process.env;
 const app = express();
 
+app.use(cors({
+  origin: "*"
+}));
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, 

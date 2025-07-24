@@ -22,34 +22,36 @@ export class TaskController {
       const parsed = taskSchema.parse(req.body);
 
       const { title, description, priority, expirationDate, categoryName, tags } = parsed;
-
+      const date = new Date(expirationDate);
       const task = await this.taskService.createTask({
-      title, 
-      description, 
-      priority, 
-      expiration_date: expirationDate, 
-      category_name: categoryName
+        title,
+        description,
+        priority,
+        expirationDate: date,
+        category_name: categoryName
     }, userId);
+      // if(!task) {
+        return res.status(201).json({ message: "Task created successfully" });
+      // }
+    // const tagInstances = await Promise.all(
+    //   tags.map(async (tagName) => {
+    //     const [tag] = await Tag.findOrCreate({ where: { name: tagName } });
+    //     return tag;
+    //   })
+    // );
 
-    const tagInstances = await Promise.all(
-      tags.map(async (tagName) => {
-        const [tag] = await Tag.findOrCreate({ where: { name: tagName } });
-        return tag;
-      })
-    );
-
-      await task.setTags(tagInstances);
-      res.status(201).json({
-        id: task.id,
-        title: task.title,
-        description: task.description,
-        status: task.status,
-        priority: task.priority,
-        expirationDate: task.expiration_date,
-        categoryId: task.category_id,
-        userId: task.user_id,
-        tags: tagInstances.map(tag => tag.name),
-      });
+    //   await task.setTags(tagInstances);
+    //   res.status(201).json({
+    //     id: task.id,
+    //     title: task.title,
+    //     description: task.description,
+    //     status: task.status,
+    //     priority: task.priority,
+    //     expirationDate: task.expiration_date,
+    //     categoryId: task.category_id,
+    //     userId: task.user_id,
+    //     tags: tagInstances.map(tag => tag.name),
+    //   });
     } catch (error) {
 
         if (error instanceof ZodError) {
@@ -123,7 +125,7 @@ export class TaskController {
       const taskId = req.params.id;
       const userId = req.userId;
       const task = await this.taskService.getTaskById(taskId);
-      if (task.userId !== userId) {
+      if (task.user_id !== userId) {
         return res.status(403).json({ message: "Unauthorized" });
       }
       await this.taskService.taskRepository.deleteTask(taskId);

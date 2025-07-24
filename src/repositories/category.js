@@ -54,6 +54,9 @@ export class CategoryRepository {
 
   async getCategoryIdByName(categoryName) {
     try {
+      if (!categoryName || typeof categoryName !== 'string') {
+        throw new Error("Invalid category name");
+      }
       const categoryNameToSearch = categoryName.toLowerCase();
       const category = await Categories.findOne({ where: { name: categoryNameToSearch } });
       if (category) {

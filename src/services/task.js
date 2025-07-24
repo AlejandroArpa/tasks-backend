@@ -13,8 +13,10 @@ export class TaskService {
 
   async createTask(taskData, userId) {
     try {
+      console.log("Creating task with data:", taskData);
+      
       const categoryId = await this.categoryRepository.getCategoryIdByName(
-        taskData.categoryName
+        taskData.category_name
       );
       if (!categoryId) {
         throw new Error("Category not found");
