@@ -1,0 +1,266 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "task API Documentation",
+    "description": "task API Documentation"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT authorization of an API. Example: 'Bearer {token}'"
+    }
+  },
+  "tags": [
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "Tasks"
+    },
+    {
+      "name": "Categories"
+    },
+    {
+      "name": "Tags"
+    },
+    {
+      "name": "Users"
+    }
+  ],
+  "paths": {
+
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User register",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "User name",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User register"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "User email and password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "default": "john.doe@example.com"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": ["email", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User login"
+          }
+        }
+      }
+    },
+
+
+    "/api/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all tasks by user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Get all tasks"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+
+	"/api/tasks/": {
+	  "post": {
+		"tags": ["Tasks"],
+		"summary": "Create task",
+		"security": [
+		  {
+			"Bearer": []
+		  }
+		],
+		"parameters": [
+		  {
+			"name": "id",
+			"in": "path",
+			"required": true,
+			"description": "Task id to get",
+			"type": "integer"
+		  }
+		],
+		"responses": {
+		  "200": {
+			"description": "Get task by id"
+		  },
+		  "401": {
+			"description": "Unauthorized"
+		  }
+		}
+	  }
+	},
+
+	"/api/tasks/{id}": {
+	  "put": {
+		"tags": ["Tasks"],
+		"summary": "Update task",
+		"security": [
+		  {
+			"Bearer": []
+		  }
+		],
+		"parameters": [
+		  {
+			"name": "id",
+			"in": "path",
+			"required": true,
+			"description": "Task id to update",
+			"type": "integer"
+		  },
+		  {
+			"name": "body",
+			"in": "body",
+			"required": true,
+			"description": "Task data",
+			"schema": {
+			  "$ref": "#/definitions/Task"
+			}
+		  }
+		],
+		"responses": {
+		  "200": {
+			"description": "Task updated"
+		  },
+		  "401": {
+			"description": "Unauthorized"
+		  }
+		}
+	  },
+
+	  "delete": {
+		"tags": ["Tasks"],
+		"summary": "Delete task",
+		"security": [
+		  {
+			"Bearer": []
+		  }
+		],
+		"parameters": [
+		  {
+			"name": "id",
+			"in": "path",
+			"required": true,
+			"description": "Task id to delete",
+			"type": "integer"
+		  }
+		],
+		"responses": {
+		  "200": {
+			"description": "Task deleted"
+		  },
+		  "401": {
+			"description": "Unauthorized"
+		  }
+		}
+	  }
+	}
+  },
+  
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "John Doe"
+        },
+        "email": {
+          "type": "string",
+          "default": "john.doe@example.com"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "email", "password", "rolId"]
+    },
+	"Task": {
+	  "type": "object",
+	  "properties": {
+		"title": {
+		  "type": "string",
+		  "default": "Task title"
+		},
+		"description": {
+		  "type": "string",
+		  "default": "Task description"
+		},
+		"dueDate": {
+		  "type": "string",
+		  "format": "date-time"
+		},
+		"categoryId": {
+		  "type": "integer",
+		  "default": 1
+		},
+		"tags": {
+		  "type": "array",
+		  "items": {
+			"$ref": "#/definitions/Tag"
+		  }
+		}
+	  },
+	  "required": ["title", "description", "dueDate", "categoryId"]
+	},
+	"Tag": {
+	  "type": "object",
+	  "properties": {
+		"name": {
+		  "type": "string",
+		  "default": "Tag name"
+		}
+	  },
+	  "required": ["name"]
+	}
+  }
+}
