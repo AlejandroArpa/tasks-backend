@@ -1,7 +1,8 @@
-import { taskModelDef } from "../models/task.js";
-import { userModelDef } from "../models/user.js";
-import { Sequelize }    from "sequelize";
-import { config }       from "dotenv";
+import { CategoryModelDef } from "../models/category.js";
+import { taskModelDef }     from "../models/task.js";
+import { userModelDef }     from "../models/user.js";
+import { Sequelize }        from "sequelize";
+import { config }           from "dotenv";
 
 
 config();
@@ -29,4 +30,10 @@ export const Tasks = sequelize.define(
   taskModelDef.name,
   taskModelDef.definition,
   taskModelDef.options
+);
+
+export const Categories = sequelize.define(
+  CategoryModelDef.name,
+  CategoryModelDef.definition,
+  CategoryModelDef.options
 );

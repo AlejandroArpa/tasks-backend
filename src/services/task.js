@@ -1,5 +1,7 @@
-import { TaskRepository } from "../repositories/task.js";
-import { config } from "dotenv";
+import { th } from "zod/locales";
+import { CategoryRepository } from "../repositories/category.js";
+import { TaskRepository }     from "../repositories/task.js";
+import { config }             from "dotenv";
 
 config();
 
@@ -11,12 +13,13 @@ export class TaskService {
 
   async createTask(taskData, userId) {
     try {
-      const categoryId = this.categoryRepository.getCategoryIdByName(
-        taskData.category
+      const categoryId = await this.categoryRepository.getCategoryIdByName(
+        taskData.categoryName
       );
       if (!categoryId) {
         throw new Error("Category not found");
       }
+
       const task = await this.taskRepository.createTask({
         ...taskData,
         categoryId,
@@ -24,8 +27,7 @@ export class TaskService {
       });
       return task;
     } catch (error) {
-      console.error("Error creating task:", error);
-      throw new Error("Error creating task");
+      throw error;
     }
   }
 
@@ -67,7 +69,7 @@ export class TaskService {
       if (!task) {
         throw new Error("Task not found");
       }
-      if (task.userId !== userId) {
+      if (task.user_id !== userId) {
         throw new Error("Unauthorized");
       }
       const updatedTask = await this.taskRepository.updateTask(
@@ -103,9 +105,10 @@ export class TaskService {
       if (!task) {
         throw new Error("Task not found");
       }
-      if (task.userId !== userId) {
+      if (task.user_id !== userId) {
         throw new Error("Unauthorized");
       }
+      
       const updatedTask = await this.taskRepository.updateTask(taskId, {
         status: "completed",
       });

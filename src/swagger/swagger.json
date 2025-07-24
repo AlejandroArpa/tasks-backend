@@ -93,6 +93,7 @@
         }
       }
     },
+
     "/api/users/": {
       "get": {
         "tags": ["Users"],
@@ -112,7 +113,6 @@
         }
       }
     },
-
 
     "/api/tasks/": {
       "post": {
@@ -259,7 +259,6 @@
         }
       }
     },
-
     "/api/tasks/{id}": {
       "put": {
         "tags": ["Tasks"],
@@ -322,10 +321,12 @@
             "description": "Unauthorized"
           }
         }
-      },
+      }
+    },
+    "/api/tasks/{id}/completed": {
       "patch": {
         "tags": ["Tasks"],
-        "summary": "Mark task as completed",
+        "summary": "Complete task",
         "security": [
           {
             "Bearer": []
@@ -343,6 +344,119 @@
         "responses": {
           "200": {
             "description": "Task marked as completed"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+
+    "/api/categories/": {
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Create category",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Category data",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Category created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Get all categories",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all categories"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+
+    "/api/categories/{id}": {
+      "put": {
+        "tags": ["Categories"],
+        "summary": "Update category",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Category id to update",
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Category data",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category updated"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Categories"],
+        "summary": "Delete category",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Category id to delete",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category deleted"
           },
           "401": {
             "description": "Unauthorized"
@@ -370,6 +484,7 @@
       },
       "required": ["name", "email", "password", "rolId"]
     },
+
     "Task": {
       "type": "object",
       "properties": {
@@ -381,11 +496,11 @@
           "type": "string",
           "default": "Task description"
         },
-        "dueDate": {
+        "expiration_date": {
           "type": "string",
           "format": "date-time"
         },
-        "categoryName": {
+        "category_name": {
           "type": "string",
           "default": "General"
         },
@@ -398,6 +513,22 @@
       },
       "required": ["title", "description", "dueDate", "categoryId"]
     },
+
+    "Category": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "Category name"
+        },
+        "description": {
+          "type": "string",
+          "default": "Category description"
+        }
+      },
+      "required": ["name"]
+    },
+
     "Tag": {
       "type": "object",
       "properties": {
