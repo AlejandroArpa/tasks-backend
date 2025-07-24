@@ -4,7 +4,7 @@ import { z, ZodError } from "zod";
 const taskSchema = z.object({
   title: z.string().min(1, "Title is required").max(255, "Title must be at most 255 characters"),
   description: z.string().max(1000, "Description must be at most 1000 characters").optional(),
-  status: z.enum(['pending', 'in_progress', 'completed', 'expired', 'canceled'], "Invalid status"),
+  // status: z.enum(['pending', 'in_progress', 'completed', 'expired', 'canceled'], "Invalid status"),
   priority: z.enum(['low', 'medium', 'high'], "Invalid priority"),
     expirationDate: z.string().refine(date => !isNaN(Date.parse(date)), "Invalid date format"),
     categoryName: z.string().min(1, "Category name is required").max(100, "Category name must be at most 100 characters"),
@@ -34,7 +34,7 @@ export class TaskController {
         });
       }
 
-      else if (error instanceof Error && error.message.includes("Category not found")) {
+      else if (error instanceof Error && error.message === "Category not found") {
         return res.status(404).json({ message: "Category not found" });
       }
       console.error("Error al crear la tarea:", error);
@@ -81,8 +81,8 @@ export class TaskController {
     try {
       const taskId = req.params.id;
       const userId = req.userId;
-      const parsed = taskSchema.parse(req.body);
-      const task = await this.taskService.updateTask(taskId, parsed, userId);
+
+      const task = await this.taskService.updateTask(taskId, req.body, userId);
       res.status(200).json(task);
     } catch (error) {
       console.error("Error updating task:", error);
@@ -111,7 +111,7 @@ export class TaskController {
       const taskId = req.params.id;
       const userId = req.userId;
       const task = await this.taskService.getTaskById(taskId);
-      if (task.userId !== userId) {
+      if (task.user_id !== userId) {
         return res.status(403).json({ message: "Unauthorized" });
       }
       const updatedTask = await this.taskService.updateTask(taskId, { status: 'completed' }, userId);

@@ -3,7 +3,17 @@ import { Tasks } from "../config/db.js";
 export class TaskRepository {
   async createTask(taskData) {
     try {
-      const task = await Tasks.create({ ...taskData, status: "pending" });
+      const preparedTask = {
+      title: taskData.title,
+      description: taskData.description,
+      priority: taskData.priority,
+      expiration_date: taskData.expirationDate, // Convertido a snake_case
+      category_id: taskData.categoryId,
+      user_id: taskData.userId
+    };
+
+      const task = await Tasks.create({ ...preparedTask, status: "pending" });
+
       return task;
     } catch (error) {
       console.error("Error creating task:", error);
@@ -32,12 +42,12 @@ export class TaskRepository {
         fecha_vencimiento_fin,
         busqueda,
         etiquetas,
-        ordenar = "createdAt",
+        ordenar = "created_at",
         direccion = "desc",
       } = filters;
 
       const where = {
-        userId,
+        user_id: userId,
       };
 
       if (completada !== undefined) {
@@ -46,7 +56,7 @@ export class TaskRepository {
       }
 
       if (categoria) {
-        where.categoryId = categoria;
+        where.category_id = categoria;
       }
 
       if (prioridad) {
@@ -54,7 +64,7 @@ export class TaskRepository {
       }
 
       if (fecha_vencimiento_inicio && fecha_vencimiento_fin) {
-        where.expirationDate = {
+        where.expiration_date = {
           [Op.between]: [fecha_vencimiento_inicio, fecha_vencimiento_fin],
         };
       }
@@ -119,6 +129,16 @@ export class TaskRepository {
     } catch (error) {
       console.error("Error deleting task:", error);
       throw new Error("Error deleting task");
+    }
+  }
+
+  async deleteTasksByCategoryId(categoryId) {
+    try {
+      const deletedRows = await Tasks.destroy({ where: { category_id: categoryId } });
+      return deletedRows;
+    } catch (error) {
+      console.error("Error deleting tasks by category ID:", error);
+      throw new Error("Error deleting tasks by category ID");
     }
   }
 }

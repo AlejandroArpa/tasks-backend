@@ -51,7 +51,7 @@ CREATE TABLE tasks (
   title TEXT NOT NULL,
   description TEXT,
   status task_status NOT NULL,
-  priotiy task_priority NOT NULL, 
+  priority task_priority NOT NULL, 
   expiration_date DATE NOT NULL,
   user_id INTEGER NOT NULL,
   category_id INTEGER NOT NULL,
