@@ -10,10 +10,10 @@ userRoute.get('/', (req, res) => {
   userController.getUserProfile(req, res);
 });
 
-userRoute.put('/:id', (req, res) => {
-  res.send("Update user");
-});
+// userRoute.put('/:id', (req, res) => {
+//   res.send("Update user");
+// });
 
-userRoute.delete('/:id', (req, res) => {
-  res.send("Delete user");
-});
+// userRoute.delete('/:id', (req, res) => {
+//   res.send("Delete user");
+// });
