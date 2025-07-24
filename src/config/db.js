@@ -1,6 +1,7 @@
-import { Sequelize } from "sequelize";
-import { config } from "dotenv";
+import { taskModelDef } from "../models/task.js";
 import { userModelDef } from "../models/user.js";
+import { Sequelize }    from "sequelize";
+import { config }       from "dotenv";
 
 
 config();
@@ -22,4 +23,10 @@ export const Users = sequelize.define(
   userModelDef.name,
   userModelDef.definition,
   userModelDef.options
+);
+
+export const Tasks = sequelize.define(
+  taskModelDef.name,
+  taskModelDef.definition,
+  taskModelDef.options
 );

@@ -113,54 +113,6 @@
       }
     },
 
-    "/api/users/{id}": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "Get user by id",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "User id to get",
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Get user by id"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-
-    "/api/tasks": {
-      "get": {
-        "tags": ["Tasks"],
-        "summary": "Get all tasks by user",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "206": {
-            "description": "Get all tasks"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
 
     "/api/tasks/": {
       "post": {
@@ -173,16 +125,133 @@
         ],
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "in": "body",
+            "name": "body",
             "required": true,
-            "description": "Task id to get",
-            "type": "integer"
+            "description": "Task data",
+            "schema": {
+              "type": "object",
+              "required": [
+                "title",
+                "priority",
+                "expirationDate",
+                "categoryName"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Task title"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Task description"
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": ["low", "medium", "high"],
+                  "description": "Task priority"
+                },
+                "expirationDate": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Task expiration date"
+                },
+                "categoryName": {
+                  "type": "string",
+                  "description": "Category name for the task"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Get task by id"
+            "description": "Task created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all tasks by user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "completada",
+            "in": "query",
+            "description": "Filtrar por estado de completado (completed, pending, expired, in_progress, canceled)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "categoria",
+            "in": "query",
+            "description": "Filtrar por ID de categoría",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "prioridad",
+            "in": "query",
+            "description": "Filtrar por nivel de prioridad (low, medium, high)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "fecha_inicio",
+            "in": "query",
+            "description": "Fecha de inicio del rango de vencimiento (YYYY-MM-DD)",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "fecha_fin",
+            "in": "query",
+            "description": "Fecha de fin del rango de vencimiento (YYYY-MM-DD)",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "busqueda",
+            "in": "query",
+            "description": "Buscar en título y descripción",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "etiquetas",
+            "in": "query",
+            "description": "Filtrar por nombres de etiquetas (separadas por comas)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ordenar",
+            "in": "query",
+            "description": "Campo por el cual ordenar (creado_en, fecha_vencimiento, prioridad, titulo)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "direccion",
+            "in": "query",
+            "description": "Dirección de ordenamiento (asc o desc)",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all tasks by user"
           },
           "401": {
             "description": "Unauthorized"
@@ -253,6 +322,32 @@
             "description": "Unauthorized"
           }
         }
+      },
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Mark task as completed",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Task id to mark as completed",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task marked as completed"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
       }
     }
   },
@@ -290,9 +385,9 @@
           "type": "string",
           "format": "date-time"
         },
-        "categoryId": {
-          "type": "integer",
-          "default": 1
+        "categoryName": {
+          "type": "string",
+          "default": "General"
         },
         "tags": {
           "type": "array",

@@ -1,25 +1,24 @@
 import { Router } from 'express';
-// import { UserController } from '../controllers';
-// import authorize from '../middlewares/auth.middleware';
+import { TaskController } from '../controllers/task.js';
 
 export const taskRoute = Router();
 
 taskRoute.get('/', (req, res) => {
-  res.send("Get all tasks");
+  TaskController.getAllTasks(req, res);
 });
 
 taskRoute.post('/', (req, res) => {
-  res.send("Create task");
+  TaskController.createTask(req, res);
 });
 
 taskRoute.put('/:id', (req, res) => {
-  res.send("Update task");
+  TaskController.updateTask(req, res);
 });
 
 taskRoute.delete('/:id', (req, res) => {
-  res.send("Delete task");
+  TaskController.deleteTask(req, res);
 });
 
-taskRoute.patch('/:id', (req, res) => {
-  res.send("Partially update task");
+taskRoute.patch('/:id/completed', (req, res) => {
+  TaskController.markTaskAsCompleted(req, res);
 });
