@@ -16,6 +16,11 @@
       "description": "JWT authorization of an API. Example: 'Bearer {token}'"
     }
   },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
   "tags": [
     {
       "name": "Authentication"
@@ -34,7 +39,6 @@
     }
   ],
   "paths": {
-
     "/api/auth/register": {
       "post": {
         "tags": ["Authentication"],
@@ -89,7 +93,54 @@
         }
       }
     },
+    "/api/users/": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user information",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get user information"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
 
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "User id to get",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get user by id"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
 
     "/api/tasks": {
       "get": {
@@ -111,101 +162,101 @@
       }
     },
 
-	"/api/tasks/": {
-	  "post": {
-		"tags": ["Tasks"],
-		"summary": "Create task",
-		"security": [
-		  {
-			"Bearer": []
-		  }
-		],
-		"parameters": [
-		  {
-			"name": "id",
-			"in": "path",
-			"required": true,
-			"description": "Task id to get",
-			"type": "integer"
-		  }
-		],
-		"responses": {
-		  "200": {
-			"description": "Get task by id"
-		  },
-		  "401": {
-			"description": "Unauthorized"
-		  }
-		}
-	  }
-	},
+    "/api/tasks/": {
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create task",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Task id to get",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get task by id"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
 
-	"/api/tasks/{id}": {
-	  "put": {
-		"tags": ["Tasks"],
-		"summary": "Update task",
-		"security": [
-		  {
-			"Bearer": []
-		  }
-		],
-		"parameters": [
-		  {
-			"name": "id",
-			"in": "path",
-			"required": true,
-			"description": "Task id to update",
-			"type": "integer"
-		  },
-		  {
-			"name": "body",
-			"in": "body",
-			"required": true,
-			"description": "Task data",
-			"schema": {
-			  "$ref": "#/definitions/Task"
-			}
-		  }
-		],
-		"responses": {
-		  "200": {
-			"description": "Task updated"
-		  },
-		  "401": {
-			"description": "Unauthorized"
-		  }
-		}
-	  },
+    "/api/tasks/{id}": {
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Update task",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Task id to update",
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Task data",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task updated"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
 
-	  "delete": {
-		"tags": ["Tasks"],
-		"summary": "Delete task",
-		"security": [
-		  {
-			"Bearer": []
-		  }
-		],
-		"parameters": [
-		  {
-			"name": "id",
-			"in": "path",
-			"required": true,
-			"description": "Task id to delete",
-			"type": "integer"
-		  }
-		],
-		"responses": {
-		  "200": {
-			"description": "Task deleted"
-		  },
-		  "401": {
-			"description": "Unauthorized"
-		  }
-		}
-	  }
-	}
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete task",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Task id to delete",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
   },
-  
+
   "definitions": {
     "User": {
       "type": "object",
@@ -224,43 +275,43 @@
       },
       "required": ["name", "email", "password", "rolId"]
     },
-	"Task": {
-	  "type": "object",
-	  "properties": {
-		"title": {
-		  "type": "string",
-		  "default": "Task title"
-		},
-		"description": {
-		  "type": "string",
-		  "default": "Task description"
-		},
-		"dueDate": {
-		  "type": "string",
-		  "format": "date-time"
-		},
-		"categoryId": {
-		  "type": "integer",
-		  "default": 1
-		},
-		"tags": {
-		  "type": "array",
-		  "items": {
-			"$ref": "#/definitions/Tag"
-		  }
-		}
-	  },
-	  "required": ["title", "description", "dueDate", "categoryId"]
-	},
-	"Tag": {
-	  "type": "object",
-	  "properties": {
-		"name": {
-		  "type": "string",
-		  "default": "Tag name"
-		}
-	  },
-	  "required": ["name"]
-	}
+    "Task": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "default": "Task title"
+        },
+        "description": {
+          "type": "string",
+          "default": "Task description"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "categoryId": {
+          "type": "integer",
+          "default": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        }
+      },
+      "required": ["title", "description", "dueDate", "categoryId"]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "Tag name"
+        }
+      },
+      "required": ["name"]
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { sequelize, Users } from "../config/db.js";
+import { Users } from "../config/db.js";
 
 export class AuthRepository {
   // Create
