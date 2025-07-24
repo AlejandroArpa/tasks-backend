@@ -1,13 +1,14 @@
 import { Router } from 'express';
-// import { UserController } from '../controllers';
-// import authorize from '../middlewares/auth.middleware';
+import { TagController } from '../controllers/tag';
+
 
 export const tagRoute = Router();
+const tagController = new TagController();
 
 tagRoute.get('/', (req, res) => {
-  res.send("Get all tags by user");
+  tagController.getAllTags(req, res);
 });
 
 tagRoute.post('/', (req, res) => {
-  res.send("Create new tag");
+  tagController.createTag(req, res);
 });

@@ -20,8 +20,36 @@ export class TaskController {
     try {
       const userId = req.userId; // El ID del usuario se obtiene del middleware authenticate
       const parsed = taskSchema.parse(req.body);
-      const task = await this.taskService.createTask(parsed, userId);
-      res.status(201).json(task);
+
+      const { title, description, priority, expirationDate, categoryName, tags } = parsed;
+
+      const task = await this.taskService.createTask({
+      title, 
+      description, 
+      priority, 
+      expiration_date: expirationDate, 
+      category_name: categoryName
+    }, userId);
+
+    const tagInstances = await Promise.all(
+      tags.map(async (tagName) => {
+        const [tag] = await Tag.findOrCreate({ where: { name: tagName } });
+        return tag;
+      })
+    );
+
+      await task.setTags(tagInstances);
+      res.status(201).json({
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        priority: task.priority,
+        expirationDate: task.expiration_date,
+        categoryId: task.category_id,
+        userId: task.user_id,
+        tags: tagInstances.map(tag => tag.name),
+      });
     } catch (error) {
 
         if (error instanceof ZodError) {

@@ -1,8 +1,10 @@
-import { CategoryModelDef } from "../models/category.js";
-import { taskModelDef }     from "../models/task.js";
-import { userModelDef }     from "../models/user.js";
-import { Sequelize }        from "sequelize";
-import { config }           from "dotenv";
+import { tasksTagsModelDef }  from "../models/tasksTags.js";
+import { CategoryModelDef }   from "../models/category.js";
+import { taskModelDef }       from "../models/task.js";
+import { userModelDef }       from "../models/user.js";
+import { tagModelDef }        from "../models/tag.js";
+import { Sequelize }          from "sequelize";
+import { config }             from "dotenv";
 
 
 config();
@@ -37,3 +39,27 @@ export const Categories = sequelize.define(
   CategoryModelDef.definition,
   CategoryModelDef.options
 );
+
+export const Tags = sequelize.define(
+  tagModelDef.name,
+  tagModelDef.definition,
+  tagModelDef.options
+);
+
+export const TasksTags = sequelize.define(
+  tasksTagsModelDef.name,
+  tasksTagsModelDef.definition,
+  tasksTagsModelDef.options
+);
+
+Tasks.belongsToMany(Tags, {
+  through: TasksTags,
+  foreignKey: "task_id",
+  otherKey: "tag_id"
+});
+
+Tags.belongsToMany(Tasks, {
+  through: TasksTags,
+  foreignKey: "tag_id",
+  otherKey: "task_id"
+});
