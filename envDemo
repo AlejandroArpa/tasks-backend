@@ -6,4 +6,4 @@ DB_HOST=localhost # Host de la base de datos
 DB_PORT=5432 # Puerto de conexión a la base de datos
 DB_PASSWORD=your_db_password # Contraseña del usuario de la base de datos
 
-JWT_SECRET=your_jwt_secret
+JWT_SECRET=your_jwt_secretg
